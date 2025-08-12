@@ -34,42 +34,24 @@ function App() {
     setError("");
 
     try {
-      // Enhanced System Instruction for better, more culturally aware roasts
+      // Safer System Instruction to avoid safety blocks. Focuses on wit, not brutality.
       const systemInstruction = `
-        Your persona is a witty and sarcastic friend from Kerala who is an expert in 'roasts'.
-        Your goal is to be funny and clever, not genuinely mean or insulting.
-        All your responses must be in 'Manglish' (a mix of Malayalam and English).
-        
-        Guidelines for your roasts:
-        1. Be witty and clever, use humor that's relatable to Kerala/Indian context
-        2. Mix Malayalam and English naturally (Manglish style)
-        3. Keep it playful, not cruel - like roasting a close friend
-        4. Use popular Malayalam phrases and expressions
-        5. Make cultural references that Malayalis would understand
-        6. Keep the tone light and funny, not harsh
-        7. Reference Kerala culture, food, movies, or common situations
-        8. Use expressions like "adipoli", "pwoli", "ayye", "machane", etc.
-
-        Here are some examples of your witty style:
-        User's input: I lost my pen.
-        Your reply: Ninte life-il oru GPS install cheyyenda avastha aanu.
-        
-        User's input: I failed my exam.
-        Your reply: Padichitt karyam illallo, ini oru tea shop thudangiko machane!
-
-        Now, apply this exact persona to all user inputs. Do not break character.
+        So you need to act like someone who are skilled in roasting.
+        The roast should be a mix of malayalam and english and should sound like coming from a malayali. 
+        The roast should be in oneline, funny but not hurtful.
+        The input  may be any random sentence you need to roast according to the scenario of input
       `;
 
-      // Updated to use Gemini 2.0 Flash for better performance and responses
+      // Configuration for the model call
       const model = genAI.getGenerativeModel({
-        model: "gemini-2.0-flash-exp", // Latest Gemini 2.0 Flash model
+        model: "gemini-2.5-pro",
         systemInstruction: systemInstruction,
       });
 
       const generationConfig = {
-        temperature: 0.9, // Higher temperature for more creative and funny responses
-        topK: 40,
-        topP: 0.95,
+        temperature: 0.8,
+        topK: 1,
+        topP: 1,
         maxOutputTokens: 2048,
       };
 
@@ -105,104 +87,102 @@ function App() {
       console.error("❌ Gemini API Error:", err);
       // Display a more helpful message to the user
       setError(
-        "Error fetching response. AI-ku oru technical issue und. Retry cheyyam? 🤖"
+        "Error fetching response. Check the console (F12) for details. Is your API Key correct and the server restarted?"
       );
     } finally {
       setIsLoading(false);
     }
   };
 
+  const handleReset = () => {
+    setUserInput("");
+    setResponse("");
+    setError("");
+  };
+
   return (
     <div className="app-container">
+      {/* Header */}
       <header className="header">
-        <h1>🔥 Manglish Roast Battle</h1>
+        <h1>Manglish Roast Battle</h1>
         <p className="subtitle">
           Share your tragedy. Enittu vangi kootikko. (Then, get ready to be roasted.)
         </p>
         <div className="badge">
-          <span className="badge-icon">⚡</span>
-          Powered by Gemini 2.0 Flash
+          <span className="badge-icon">🔥</span>
+          Powered by AI Sarcasm
         </div>
       </header>
 
-      <main className="main-content">
+      {/* Main Content */}
+      <div className="main-content">
+        
+        {/* Input Section */}
         <div className="input-section">
           <div className="section-header">
             <h2>
-              <span className="icon">💬</span>
+              <span className="icon">📝</span>
               Your Tragedy
             </h2>
             <div className={`status-indicator ${isLoading ? 'loading' : 'ready'}`}>
-              {isLoading ? 'Generating roast...' : 'Ready to roast'}
+              {isLoading ? '⏳ Processing' : '✅ Ready'}
             </div>
           </div>
 
           <form onSubmit={handleSubmit} className="roast-form">
             <div className="form-group">
-              <label htmlFor="userInput">What happened now?</label>
+              <label htmlFor="tragedy">What happened now?</label>
               <textarea
-                id="userInput"
+                id="tragedy"
                 value={userInput}
                 onChange={(e) => setUserInput(e.target.value)}
-                placeholder="Tell us about your latest life disaster... The funnier the better! 😅"
-                rows="4"
+                placeholder="Type your tragedy here... (e.g., I lost my pen, I'm single, I failed my exam)"
                 className="input-textarea"
                 disabled={isLoading}
               />
             </div>
-            
-            <button 
-              type="submit" 
+
+            {error && (
+              <div className="error-message">
+                <span className="error-icon">❌</span>
+                {error}
+              </div>
+            )}
+
+            <button
+              type="submit"
               disabled={isLoading || !userInput.trim()}
               className={`submit-btn ${isLoading ? 'loading' : ''}`}
             >
               {isLoading ? (
                 <>
-                  <span className="loading-spinner"></span>
-                  Generating Epic Roast...
+                  <div className="loading-spinner"></div>
+                  <span>Loading your insult...</span>
                 </>
               ) : (
                 <>
-                  <span className="btn-icon">🎯</span>
-                  Roast Me
+                  <span className="btn-icon">🔥</span>
+                  <span>Roast Me</span>
                 </>
               )}
             </button>
           </form>
         </div>
 
+        {/* Output Section */}
         <div className="output-section">
           <div className="section-header">
             <h2>
-              <span className="icon">🎯</span>
+              <span className="icon">🔥</span>
               The Roast
             </h2>
-            <div className={`status-indicator ${
-              response ? 'complete' : isLoading ? 'loading' : 'waiting'
-            }`}>
-              {response ? 'Roast complete!' : isLoading ? 'AI is thinking...' : 'Waiting for input'}
+            <div className={`status-indicator ${response ? 'complete' : 'waiting'}`}>
+              {response ? '📝 Complete' : '⏳ Waiting'}
             </div>
           </div>
 
           <div className="response-area">
-            {error && (
-              <div className="error-message">
-                <span className="error-icon">⚠️</span>
-                {error}
-              </div>
-            )}
-
-            {!response && !error && !isLoading && (
-              <div className="placeholder">
-                <div className="placeholder-content">
-                  <span className="placeholder-icon">🎭</span>
-                  <p>Your epic roast will appear here...</p>
-                  <p className="placeholder-subtitle">Ready to face the heat?</p>
-                </div>
-              </div>
-            )}
-
-            {isLoading && (
+            {isLoading ? (
               <div className="loading-state">
                 <div className="loading-animation">
                   <div className="loading-dots">
@@ -210,46 +190,44 @@ function App() {
                     <span></span>
                     <span></span>
                   </div>
-                  <p>Crafting the perfect roast...</p>
+                  <p>Crafting your personalized roast...</p>
                 </div>
               </div>
-            )}
-
-            {response && (
+            ) : response ? (
               <div className="response-content">
                 <div className="response-header">
-                  <span className="response-label">🔥 Fresh Roast</span>
+                  <span className="response-label">🤖 AI Roast Response</span>
                 </div>
-                <div className="response-text">
-                  {response}
-                </div>
+                <div className="response-text">{response}</div>
                 <div className="response-footer">
-                  <button 
-                    onClick={() => {
-                      setResponse("");
-                      setUserInput("");
-                      setError("");
-                    }}
-                    className="reset-btn"
-                  >
-                    <span className="btn-icon">🔄</span>
-                    Try Another Roast
+                  <button onClick={handleReset} className="reset-btn">
+                    <span>🔄</span>
+                    <span>Try Another</span>
                   </button>
+                </div>
+              </div>
+            ) : (
+              <div className="placeholder">
+                <div className="placeholder-content">
+                  <span className="placeholder-icon">🤔</span>
+                  <p>Ready for your roast?</p>
+                  <p className="placeholder-subtitle">Share your tragedy above to get started</p>
                 </div>
               </div>
             )}
           </div>
         </div>
-      </main>
+      </div>
 
+      {/* Footer */}
       <footer className="footer">
         <div className="footer-content">
-          <p>Built with love and sarcasm in Kerala 🌴</p>
+          <p>Built with ❤️ and a lot of sarcasm</p>
           <div className="tech-stack">
             <span className="tech-badge">React</span>
-            <span className="tech-badge">Vite</span>
-            <span className="tech-badge">Gemini AI</span>
-            <span className="tech-badge">Manglish</span>
+            <span className="tech-badge">CSS3</span>
+            <span className="tech-badge">Google Gemini AI</span>
+            <span className="tech-badge">Manglish Humor</span>
           </div>
         </div>
       </footer>
