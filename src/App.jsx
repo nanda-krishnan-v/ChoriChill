@@ -104,28 +104,30 @@ function App() {
     <div className="app-container">
       {/* Header */}
       <header className="header">
-        <h1>Manglish Roast Battle</h1>
+        <h1>ചൊറി-Chill</h1>
         <p className="subtitle">
-          Share your tragedy. Enittu vangi kootikko. (Then, get ready to be roasted.)
+          Share your tragedy. Enittu vangi kootikko. (Then, get ready to be
+          roasted.)
         </p>
         <div className="badge">
           <span className="badge-icon">🔥</span>
-          Powered by AI Sarcasm
+          Powered by experience
         </div>
       </header>
 
       {/* Main Content */}
       <div className="main-content">
-        
         {/* Input Section */}
         <div className="input-section">
           <div className="section-header">
             <h2>
               <span className="icon">📝</span>
-              Your Tragedy
+              Chori - Your Tragedy
             </h2>
-            <div className={`status-indicator ${isLoading ? 'loading' : 'ready'}`}>
-              {isLoading ? '⏳ Processing' : '✅ Ready'}
+            <div
+              className={`status-indicator ${isLoading ? "loading" : "ready"}`}
+            >
+              {isLoading ? "⏳ Processing" : "✅ Ready"}
             </div>
           </div>
 
@@ -152,7 +154,7 @@ function App() {
             <button
               type="submit"
               disabled={isLoading || !userInput.trim()}
-              className={`submit-btn ${isLoading ? 'loading' : ''}`}
+              className={`submit-btn ${isLoading ? "loading" : ""}`}
             >
               {isLoading ? (
                 <>
@@ -174,10 +176,14 @@ function App() {
           <div className="section-header">
             <h2>
               <span className="icon">🔥</span>
-              The Roast
+              Chill - The Roast
             </h2>
-            <div className={`status-indicator ${response ? 'complete' : 'waiting'}`}>
-              {response ? '📝 Complete' : '⏳ Waiting'}
+            <div
+              className={`status-indicator ${
+                response ? "complete" : "waiting"
+              }`}
+            >
+              {response ? "📝 Complete" : "⏳ Waiting"}
             </div>
           </div>
 
@@ -211,7 +217,9 @@ function App() {
                 <div className="placeholder-content">
                   <span className="placeholder-icon">🤔</span>
                   <p>Ready for your roast?</p>
-                  <p className="placeholder-subtitle">Share your tragedy above to get started</p>
+                  <p className="placeholder-subtitle">
+                    Share your tragedy above to get started
+                  </p>
                 </div>
               </div>
             )}
