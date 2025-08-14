@@ -22,6 +22,9 @@ function App() {
     setError("");
 
     try {
+      console.log("Sending request to:", `${API_BASE_URL}/api/roast`);
+      console.log("Request payload:", { userInput: userInput.trim() });
+
       const apiResponse = await fetch(`${API_BASE_URL}/api/roast`, {
         method: "POST",
         headers: {
@@ -32,7 +35,11 @@ function App() {
         }),
       });
 
+      console.log("Response status:", apiResponse.status);
+      console.log("Response headers:", apiResponse.headers);
+
       const data = await apiResponse.json();
+      console.log("Response data:", data);
 
       if (!apiResponse.ok) {
         throw new Error(
@@ -40,13 +47,29 @@ function App() {
         );
       }
 
+      // Check for different possible response formats
       if (data.success && data.roast) {
         setResponse(data.roast);
+      } else if (data.roast) {
+        // If roast exists without success field
+        setResponse(data.roast);
+      } else if (data.message) {
+        // If response has message field
+        setResponse(data.message);
+      } else if (data.response) {
+        // If response has response field
+        setResponse(data.response);
       } else {
-        throw new Error(data.error || "Unexpected response format");
+        // If it's just a string
+        setResponse(JSON.stringify(data));
       }
     } catch (err) {
       console.error("❌ API Error:", err);
+      console.error("Error details:", {
+        name: err.name,
+        message: err.message,
+        stack: err.stack,
+      });
 
       // Handle different types of errors
       if (err.name === "TypeError" && err.message.includes("fetch")) {
@@ -57,6 +80,8 @@ function App() {
         setError("Too many requests. Please try again later.");
       } else if (err.message.includes("500")) {
         setError("Server error. Please try again in a moment.");
+      } else if (err.message.includes("Unexpected response format")) {
+        setError("Server returned an unexpected format. Please try again.");
       } else {
         setError(err.message || "Something went wrong. Please try again.");
       }
@@ -70,7 +95,7 @@ function App() {
       {/* Header Section */}
       <header className="app-header">
         <div className="robot-icon">🤖</div>
-        <h1 className="app-title">Chori-CHill</h1>
+        <h1 className="app-title">Chori-Chill</h1>
         <p className="app-subtitle">
           Your friendly neighborhood savage AI roaster
         </p>
@@ -119,7 +144,11 @@ function App() {
             <div className="response-section">
               <div className="response-header">
                 <span className="response-icon">🤖</span>
-                <span className="response-title">Chori-CHill says:</span>
+                <span className="response-title">
+                  {error
+                    ? "Oops! Something went wrong 😅"
+                    : "🔥 Here's Your Roast! 🔥"}
+                </span>
               </div>
 
               {error && <div className="error-message">{error}</div>}
