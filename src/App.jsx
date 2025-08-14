@@ -12,8 +12,8 @@ function App() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!userInput) {
-      setError("Oru tragedy engilum para... (Say at least one tragedy...)");
+    if (!userInput.trim()) {
+      setError("Ayyo! Please share your tragedy first! 😅");
       return;
     }
 
@@ -28,14 +28,16 @@ function App() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          userInput: userInput.trim()
+          userInput: userInput.trim(),
         }),
       });
 
       const data = await apiResponse.json();
 
       if (!apiResponse.ok) {
-        throw new Error(data.error || `HTTP error! status: ${apiResponse.status}`);
+        throw new Error(
+          data.error || `HTTP error! status: ${apiResponse.status}`
+        );
       }
 
       if (data.success && data.roast) {
@@ -43,16 +45,17 @@ function App() {
       } else {
         throw new Error(data.error || "Unexpected response format");
       }
-
     } catch (err) {
       console.error("❌ API Error:", err);
-      
+
       // Handle different types of errors
-      if (err.name === 'TypeError' && err.message.includes('fetch')) {
-        setError("Cannot connect to server. Make sure the backend is running on port 5000.");
-      } else if (err.message.includes('429')) {
+      if (err.name === "TypeError" && err.message.includes("fetch")) {
+        setError(
+          "Cannot connect to server. Make sure the backend is running on port 5000."
+        );
+      } else if (err.message.includes("429")) {
         setError("Too many requests. Please try again later.");
-      } else if (err.message.includes('500')) {
+      } else if (err.message.includes("500")) {
         setError("Server error. Please try again in a moment.");
       } else {
         setError(err.message || "Something went wrong. Please try again.");
@@ -63,33 +66,74 @@ function App() {
   };
 
   return (
-    <div className="app-container">
-      <h1>Manglish Roast Battle</h1>
-      <p>
-        Share your tragedy. Enittu vangi kootikko. (Then, get ready to be
-        roasted.)
-      </p>
+    <div className="app-wrapper">
+      {/* Header Section */}
+      <header className="app-header">
+        <div className="robot-icon">🤖</div>
+        <h1 className="app-title">Chori-CHill</h1>
+        <p className="app-subtitle">
+          Your friendly neighborhood savage AI roaster
+        </p>
+        <p className="app-description">
+          Describe your situation and get roasted in style! 🔥
+        </p>
+      </header>
 
-      <form onSubmit={handleSubmit}>
-        <textarea
-          value={userInput}
-          onChange={(e) => setUserInput(e.target.value)}
-          placeholder="What happened now?"
-          rows="3"
-        />
-        <button type="submit" disabled={isLoading}>
-          {isLoading ? "Loading your insult..." : "Roast Me"}
-        </button>
-      </form>
+      {/* Main Content Container */}
+      <main className="main-container">
+        <div className="content-card">
+          {/* Input Section */}
+          <div className="input-section">
+            <textarea
+              className="tragedy-input"
+              value={userInput}
+              onChange={(e) => setUserInput(e.target.value)}
+              placeholder="What is your aim in life?"
+              rows="4"
+              disabled={isLoading}
+            />
 
-      {error && <p className="error">{error}</p>}
+            <button
+              type="button"
+              className="roast-button"
+              onClick={handleSubmit}
+              disabled={isLoading || !userInput.trim()}
+            >
+              {isLoading ? (
+                <>
+                  <span className="loading-spinner"></span>
+                  <span>Cooking Roast...</span>
+                </>
+              ) : (
+                <>
+                  <span className="button-icon">⚡</span>
+                  <span>Roast Me</span>
+                  <span className="button-icon">🔥</span>
+                </>
+              )}
+            </button>
+          </div>
 
-      {response && (
-        <div className="response-area">
-          <h2>Roast:</h2>
-          <pre>{response}</pre>
+          {/* Response/Error Section */}
+          {(response || error) && (
+            <div className="response-section">
+              <div className="response-header">
+                <span className="response-icon">🤖</span>
+                <span className="response-title">Chori-CHill says:</span>
+              </div>
+
+              {error && <div className="error-message">{error}</div>}
+
+              {response && <div className="roast-response">{response}</div>}
+            </div>
+          )}
         </div>
-      )}
+      </main>
+
+      {/* Footer */}
+      <footer className="app-footer">
+        <p>Made with ❤️ and a lot of sass • Powered by Gemini AI</p>
+      </footer>
     </div>
   );
 }
