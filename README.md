@@ -1,12 +1,18 @@
-# React + Vite
+# ChoriChill
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**ChoriChill** is a playful roasting platform where users can receive witty, sarcastic, and humorous roasts instantly. Powered by a custom REST API and integrated with Google’s **Gemini AI**, it delivers smart and context-aware comebacks in real time. Built with **React + Vite** for speed and responsiveness.
 
-Currently, two official plugins are available:
+> **Note:** The app is currently deployed on Vercel for demo purposes but is not publicly hosted and there are no plans for future public hosting.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Demo
 
-## Expanding the ESLint configuration
+Deployed on Vercel (private/demo only): [chorichill.vercel.app](https://chorichill.vercel.app)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Features
+
+- **Roast Generator**: AI-powered witty comebacks using Google Gemini  
+- **Custom REST API**: Secure backend for handling AI requests  
+- **React + Vite**: Lightweight and optimized for fast build and dev speeds  
+- **Hot Module Replacement (HMR)**: Instant updates without full page reloads  
+- **Minimal & Fun UI**: Focused on delivering roasts with style
+
