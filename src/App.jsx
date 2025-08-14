@@ -161,7 +161,7 @@ function App() {
 
       {/* Footer */}
       <footer className="app-footer">
-        <p>Made with ❤️ and a lot of sass • Powered by Gemini AI</p>
+        <p>Made with ❤️ and a lot of fun • Powered by JustBuild by ThinQubator</p>
       </footer>
     </div>
   );
