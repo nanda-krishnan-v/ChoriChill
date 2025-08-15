@@ -90,6 +90,11 @@ function App() {
     }
   };
 
+  const handleMoreClick = () => {
+    // Redirect to the main webpage
+    window.location.href = window.location.origin;
+  };
+
   return (
     <div className="app-wrapper">
       {/* Header Section */}
@@ -141,19 +146,29 @@ function App() {
 
           {/* Response/Error Section */}
           {(response || error) && (
-            <div className="response-section">
-              <div className="response-header">
-                <span className="response-icon">🤖</span>
-                <span className="response-title">
-                  {error
-                    ? "Oops! Something went wrong 😅"
-                    : "🔥 Here's Your Roast! 🔥"}
+            <div className="alert-container">
+              <div className="alert-header">
+                <span className="alert-icon">{error ? "⚠️" : "🎯"}</span>
+                <span className="alert-title">
+                  {error ? "Error Alert!" : "Roast Alert!"}
                 </span>
               </div>
 
-              {error && <div className="error-message">{error}</div>}
+              <div className="alert-content">
+                {error ? (
+                  <div className="error-message">{error}</div>
+                ) : (
+                  <div className="roast-response">{response}</div>
+                )}
+              </div>
 
-              {response && <div className="roast-response">{response}</div>}
+              {!error && (
+                <div className="alert-actions">
+                  <button className="more-button" onClick={handleMoreClick}>
+                    More? 🔥
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -161,7 +176,9 @@ function App() {
 
       {/* Footer */}
       <footer className="app-footer">
-        <p>Made with ❤️ and a lot of fun • Powered by JustBuild by ThinQubator</p>
+        <p>
+          Made with ❤️ and a lot of fun • Powered by JustBuild by ThinQubator
+        </p>
       </footer>
     </div>
   );
